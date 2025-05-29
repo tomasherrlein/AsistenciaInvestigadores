@@ -1,3 +1,6 @@
+using System.ServiceProcess;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace WinFormsAsistenciaInvestigadores
 {
     internal static class Program
@@ -8,10 +11,17 @@ namespace WinFormsAsistenciaInvestigadores
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+            var serviceProvider = services.BuildServiceProvider();
+
+            var mainForm = serviceProvider.GetRequiredService<Form1>();
+            Application.Run(mainForm);
+        }
+
+        private static void ConfigureServices(ServiceCollection services)
+        {
+            services.AddTransient<Form1>();
         }
     }
 }
