@@ -1,18 +1,29 @@
-﻿using ApplicationBussines;
+﻿using System.Security.Cryptography.X509Certificates;
+using ApplicationBussines;
+using Data;
 using Entities;
+using Models;
 
 namespace Repository
 {
     public class InvestigadorRepository : IRepository<Investigador>
     {
+
+        public InvestigadorRepository(AppDbContext)
+
         public async Task AddAsync(Investigador investigador)
         {
-            throw new NotImplementedException();
+            var investigadorModel = new InvestigadorModel()
+            {
+                Nombre = investigador.Nombre
+            };
+
+            
         }
 
         public async Task<IEnumerable<Investigador>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            
         }
 
         public async Task<Investigador> GetByIdAsync(int id)

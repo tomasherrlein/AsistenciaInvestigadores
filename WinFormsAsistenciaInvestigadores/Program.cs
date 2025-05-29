@@ -15,13 +15,13 @@ namespace WinFormsAsistenciaInvestigadores
             ConfigureServices(services);
             var serviceProvider = services.BuildServiceProvider();
 
-            var mainForm = serviceProvider.GetRequiredService<Form1>();
+            var mainForm = serviceProvider.GetRequiredService<FormPrincipal>();
             Application.Run(mainForm);
         }
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            services.AddTransient<Form1>();
+            services.AddTransient<FormPrincipal>();
         }
     }
 }
