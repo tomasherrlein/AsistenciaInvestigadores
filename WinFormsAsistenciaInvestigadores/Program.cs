@@ -1,4 +1,8 @@
+using System.Runtime.InteropServices;
 using System.ServiceProcess;
+using Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace WinFormsAsistenciaInvestigadores
@@ -21,6 +25,13 @@ namespace WinFormsAsistenciaInvestigadores
 
         private static void ConfigureServices(ServiceCollection services)
         {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+                
+                
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<FormPrincipal>();
         }
     }
