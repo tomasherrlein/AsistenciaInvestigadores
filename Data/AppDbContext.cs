@@ -13,9 +13,9 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<InvestigadorModel>().ToTable("Investigador");
-            modelBuilder.Entity<DepartamentoModel>().ToTable("Departamento");
-            modelBuilder.Entity<AsistenciaModel>().ToTable("Asistencia");
+            modelBuilder.Entity<InvestigadorModel>().ToTable("Investigadores");
+            modelBuilder.Entity<DepartamentoModel>().ToTable("Departamentos");
+            modelBuilder.Entity<AsistenciaModel>().ToTable("Asistencias");
         }
     }
 }
