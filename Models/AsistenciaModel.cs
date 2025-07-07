@@ -8,10 +8,16 @@ namespace Models
 {
     public class AsistenciaModel
     {
-        public int IDAsistencia {  get; set; }
-        public string IDInvestigador { get; set; }
-        public DateTime Fecha { get; set; }
-        public DateTime HoraEntrada { get; set; }
-        public DateTime HoraSalida { get; set; }
+        public int Idasistencia { get; set; }
+
+        public int Idinvestigador { get; set; }
+
+        public DateOnly Fecha { get; set; }
+
+        public TimeOnly HoraEntrada { get; set; }
+
+        public TimeOnly? HoraSalida { get; set; }
+
+        public virtual InvestigadorModel IdinvestigadorNavigation { get; set; } = null!;
     }
 }

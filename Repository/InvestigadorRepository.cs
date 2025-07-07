@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using ApplicationBussines;
+using ApplicationBussines.Mappers;
 using Data;
 using Entities;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,16 @@ using Models;
 
 namespace Repository
 {
-    public class InvestigadorRepository : IRepository<Investigador>
+    public class InvestigadorRepository : IInvestigadorRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly IMapper<InvestigadorModel, Investigador> _mapperToEntity;
 
-        public InvestigadorRepository(AppDbContext dbContext)
+        public InvestigadorRepository(AppDbContext dbContext, 
+            IMapper<InvestigadorModel, Investigador> mapperToEntity)
         {
             _dbContext = dbContext;
+            _mapperToEntity = mapperToEntity;
         }
 
         public async Task AddAsync(Investigador investigador)
@@ -29,10 +33,15 @@ namespace Repository
 
         public async Task<IEnumerable<Investigador>> GetAllAsync()
         {
-            return await _dbContext.Investigadores.Select(i => new Investigador
-                {
-                    Nombre = i.Nombre
-                }).ToListAsync();
+            var investigadoresModels = await _dbContext.Investigadores.Include(i => i.Iddepartamentos).ToListAsync();
+            var investigadores = new List<Investigador>();
+            
+            foreach (var i in investigadoresModels) 
+            {
+                investigadores.Add(_mapperToEntity.Map(i));
+            }
+
+            return investigadores; 
         }
 
         public async Task<Investigador> GetByIdAsync(int id)
@@ -41,7 +50,7 @@ namespace Repository
 
             return new Investigador
             {
-                IdInvestigador = investigadorModel.IDInvestigador,
+                IdInvestigador = investigadorModel.Idinvestigador,
                 Nombre = investigadorModel.Nombre
             };
         }
@@ -63,5 +72,21 @@ namespace Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Investigador>> GetAllByDepartamentoNombreAsync(string nombreDepartamento)
+        {
+            var investigadoresModels = await _dbContext.Investigadores
+                                    .Include(i => i.Iddepartamentos)
+                                    .Where(i => i.Iddepartamentos.Any(d => d.Nombre == nombreDepartamento))
+                                    .ToListAsync();
+
+            var investigadores = new List<Investigador>();
+
+            foreach (var i in investigadoresModels)
+            {
+                investigadores.Add(_mapperToEntity.Map(i));
+            }
+
+            return investigadores;
+        }
     }
 }

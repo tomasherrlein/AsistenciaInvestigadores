@@ -2,9 +2,13 @@
 {
     public class InvestigadorModel
     {
-        public int IDInvestigador { get; set; }
-        public string Nombre { get; set; }
-        public int IDDepartamento { get; set; }
+        public int Idinvestigador { get; set; }
+
+        public string Nombre { get; set; } = null!;
+
+        public virtual ICollection<AsistenciaModel> Asistencia { get; set; } = new List<AsistenciaModel>();
+
+        public virtual ICollection<DepartamentoModel> Iddepartamentos { get; set; } = new List<DepartamentoModel>();
 
     }
 }

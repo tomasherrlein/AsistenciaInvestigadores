@@ -8,7 +8,8 @@ namespace Models
 {
     public class DepartamentoModel
     {
-        public int IDDepartamento { get; set; }
-        public string Nombre { get; set; }
+        public int Iddepartamento { get; set; }
+        public string Nombre { get; set; } = null!;
+        public virtual ICollection<InvestigadorModel> Idinvestigadores { get; set; } = new List<InvestigadorModel>();
     }
 }
