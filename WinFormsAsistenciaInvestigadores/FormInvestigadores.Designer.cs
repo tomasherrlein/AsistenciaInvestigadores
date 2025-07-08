@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             dataGridView1 = new DataGridView();
             btnFiltroMecanica = new Button();
             btnFiltroElectrica = new Button();
@@ -41,6 +41,7 @@
             lblFiltros = new Label();
             label1 = new Label();
             panel1 = new Panel();
+            btnMostrarEliminados = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panelFiltro.SuspendLayout();
             panel1.SuspendLayout();
@@ -52,37 +53,35 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToResizeColumns = false;
             dataGridView1.AllowUserToResizeRows = false;
-            
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.MediumTurquoise;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.MediumTurquoise;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(57, 155);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridView1.RowTemplate.Height = 30;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(550, 212);
             dataGridView1.TabIndex = 0;
-            dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(
-            dataGridView1_CellContentClick);
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // btnFiltroMecanica
             // 
@@ -185,6 +184,7 @@
             // 
             panelFiltro.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelFiltro.BackColor = SystemColors.GradientInactiveCaption;
+            panelFiltro.Controls.Add(btnMostrarEliminados);
             panelFiltro.Controls.Add(btnFiltroAutomotriz);
             panelFiltro.Controls.Add(btnFiltroCivil);
             panelFiltro.Controls.Add(btnFiltroElectrica);
@@ -225,6 +225,20 @@
             panel1.Size = new Size(580, 32);
             panel1.TabIndex = 10;
             // 
+            // btnMostrarEliminados
+            // 
+            btnMostrarEliminados.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnMostrarEliminados.Font = new Font("Segoe UI Black", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnMostrarEliminados.Location = new Point(263, 334);
+            btnMostrarEliminados.MaximumSize = new Size(86, 48);
+            btnMostrarEliminados.MinimumSize = new Size(86, 48);
+            btnMostrarEliminados.Name = "btnMostrarEliminados";
+            btnMostrarEliminados.Size = new Size(86, 48);
+            btnMostrarEliminados.TabIndex = 11;
+            btnMostrarEliminados.Text = "Mostrar eliminados";
+            btnMostrarEliminados.UseVisualStyleBackColor = true;
+            btnMostrarEliminados.Click += btnMostrarEliminados_Click;
+            // 
             // FormInvestigadores
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -261,5 +275,6 @@
         private Label lblFiltros;
         private Label label1;
         private Panel panel1;
+        private Button btnMostrarEliminados;
     }
 }

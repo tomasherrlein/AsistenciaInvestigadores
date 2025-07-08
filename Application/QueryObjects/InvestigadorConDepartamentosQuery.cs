@@ -58,5 +58,23 @@ namespace ApplicationBussines.QueryObjects
 
             return query;
         }
+
+        public async Task<IEnumerable<InvestigadorConDepartamentosResult>> ExecuteAsyncEliminados()
+        {
+            var investigadores = await _repository.GetAllEliminadosAsync();
+            var query = new List<InvestigadorConDepartamentosResult>();
+
+            foreach (var i in investigadores)
+            {
+                query.Add(new InvestigadorConDepartamentosResult()
+                {
+                    Id = i.IdInvestigador,
+                    Nombre = i.Nombre,
+                    Departamentos = string.Join(", ", i.Iddepartamentos.Select(d => d.Nombre)),
+                });
+            }
+
+            return query;
+        }
     }
 }

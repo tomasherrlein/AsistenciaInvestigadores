@@ -1,9 +1,8 @@
-
 using ApplicationBussines.DTOs;
 using ApplicationBussines.Mappers;
 using Entities;
 
-namespace ApplicationBussines
+namespace ApplicationBussines.UseCasesInvestigador
 {
     public class EditInvestigador
     {

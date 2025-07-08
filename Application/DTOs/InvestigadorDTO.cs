@@ -12,6 +12,7 @@ namespace ApplicationBussines.DTOs
     {
         public int Id { get; set; }
         public string Nombre {  get; set; }
+        public bool Eliminado { get; set; } = false;
         public ICollection<int> IdDepartamentos { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ApplicationBussines.DTOs;
 using Entities;
 
-namespace ApplicationBussines
+namespace ApplicationBussines.UseCasesInvestigador
 {
     public class AddInvestigador
     {

@@ -1,5 +1,6 @@
 ﻿using ApplicationBussines;
 using ApplicationBussines.QueryObjects;
+using ApplicationBussines.UseCasesInvestigador;
 using Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,33 +21,63 @@ namespace WinFormsAsistenciaInvestigadores
         private IServiceProvider _serviceProvider;
         private InvestigadorConDepartamentosQuery _query;
         private IInvestigadorRepository _repository;
+        private SoftDeleteInvestigador _softDelete;
+        private SoftRestoreInvestigador _softRestore;
+        private bool _mostrarEliminados = false;
 
         public FormInvestigadores(IServiceProvider serviceProvider,
             InvestigadorConDepartamentosQuery query,
-            IInvestigadorRepository repository)
+            IInvestigadorRepository repository,
+            SoftDeleteInvestigador softDelete,
+            SoftRestoreInvestigador softRestore)
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
             _query = query;
             _repository = repository;
-
+            _softDelete = softDelete;
+            _softRestore = softRestore;
         }
 
 
         private async void FormMain_LoadAsync(object sender, EventArgs e)
         {
             await Reload();
-            AgregarColumnas();
         }
 
         private async Task Reload()
         {
-            var investigadores = await _query.ExecuteAsync();
+            
 
-            dataGridView1.DataSource = investigadores;
-            if (dataGridView1.Columns.Contains("Id"))
+            if(_mostrarEliminados)
             {
-                dataGridView1.Columns["Id"].Visible = false;
+                var investigadoresEliminados = await _query.ExecuteAsyncEliminados();
+
+                dataGridView1.DataSource = investigadoresEliminados;
+                if (dataGridView1.Columns.Contains("Id"))
+                {
+                    dataGridView1.Columns["Id"].Visible = false;
+                }
+
+                if (!dataGridView1.Columns.Contains("RestoreButton"))
+                {
+                    AgregarColumnasRestaurar();
+                }
+            }
+            else
+            {
+                var investigadoresActivos = await _query.ExecuteAsync();
+
+                dataGridView1.DataSource = investigadoresActivos;
+                if (dataGridView1.Columns.Contains("Id"))
+                {
+                    dataGridView1.Columns["Id"].Visible = false;
+                }
+
+                if (!dataGridView1.Columns.Contains("DeleteButton") || !dataGridView1.Columns.Contains("EditButton"))
+                {
+                    AgregarColumnasEliminar();
+                }
             }
         }
 
@@ -79,24 +110,30 @@ namespace WinFormsAsistenciaInvestigadores
             await Reload();
         }
 
-        private void btnAgregar_Click(object sender, EventArgs e)
+        private async void btnAgregar_Click(object sender, EventArgs e)
         {
             var formAgregar = _serviceProvider.GetRequiredService<FormAgregarEditarInvestigador>();
             formAgregar.ShowDialog();
-            Reload();
+            await Reload();
         }
 
-        private void AgregarColumnas()
+        private void AgregarColumnasEliminar()
         {
+            if (dataGridView1.Columns.Contains("RestoreButton"))
+            {
+                dataGridView1.Columns.Remove("RestoreButton");
+            }
+
             DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
             editButtonColumn.Name = "EditButton";
             editButtonColumn.HeaderText = "";
             editButtonColumn.Text = "Editar";
             editButtonColumn.UseColumnTextForButtonValue = true;
             editButtonColumn.DefaultCellStyle.BackColor = Color.Blue;
+            editButtonColumn.DefaultCellStyle.ForeColor = Color.Blue;
             dataGridView1.Columns.Add(editButtonColumn);
-            
-            
+
+
             DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
             deleteButtonColumn.Name = "DeleteButton";
             deleteButtonColumn.HeaderText = "";
@@ -105,6 +142,29 @@ namespace WinFormsAsistenciaInvestigadores
             deleteButtonColumn.DefaultCellStyle.BackColor = Color.Red;
             deleteButtonColumn.DefaultCellStyle.ForeColor = Color.Red;
             dataGridView1.Columns.Add(deleteButtonColumn);
+        }
+
+        private void AgregarColumnasRestaurar()
+        {
+            if (dataGridView1.Columns.Contains("EditButton"))
+            {
+                dataGridView1.Columns.Remove("EditButton");
+            }
+
+            if (dataGridView1.Columns.Contains("DeleteButton"))
+            {
+                dataGridView1.Columns.Remove("DeleteButton");
+            }
+            
+
+            DataGridViewButtonColumn restoreButtonColumn = new DataGridViewButtonColumn();
+            restoreButtonColumn.Name = "RestoreButton";
+            restoreButtonColumn.HeaderText = "";
+            restoreButtonColumn.Text = "Restaurar";
+            restoreButtonColumn.UseColumnTextForButtonValue = true;
+            restoreButtonColumn.DefaultCellStyle.BackColor = Color.Green;
+            restoreButtonColumn.DefaultCellStyle.ForeColor = Color.Green;
+            dataGridView1.Columns.Add(restoreButtonColumn);
         }
 
         private async void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -125,8 +185,43 @@ namespace WinFormsAsistenciaInvestigadores
                 };
                 form.LoadData(investigadorDto);
                 form.ShowDialog();
-                Reload();
             }
+
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "DeleteButton")
+            {
+                DialogResult ok = MessageBox.Show("¿Desea eliminar el investigador?", "Aviso", MessageBoxButtons.YesNo);
+                if (ok == DialogResult.Yes)
+                {
+                    await _softDelete.ExecuteAsync(investigadorId);
+                }
+            }
+
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "RestoreButton")
+            {
+                DialogResult ok = MessageBox.Show("¿Desea restaurar el investigador?", "Aviso", MessageBoxButtons.YesNo);
+                if (ok == DialogResult.Yes)
+                {
+                    await _softRestore.ExecuteAsync(investigadorId);
+                }
+            }
+
+            await Reload();
+        }
+
+        private async void btnMostrarEliminados_Click(object sender, EventArgs e)
+        {
+            _mostrarEliminados = !_mostrarEliminados;
+
+            if (_mostrarEliminados)
+            {
+                btnMostrarEliminados.Text = "Mostrar activos";
+            }
+            else
+            {
+                btnMostrarEliminados.Text = "Mostrar eliminados";
+            }
+
+            await Reload();
         }
     }
 }

@@ -10,6 +10,8 @@ namespace ApplicationBussines
     public interface IInvestigadorRepository : IRepository<Investigador>
     {
         Task<IEnumerable<Investigador>> GetAllByDepartamentoNombreAsync(string nombreDepartamento);
-
+        Task<IEnumerable<Investigador>> GetAllEliminadosAsync();
+        Task SoftDeleteAsync(int id);
+        Task SoftRestoreAsync(int id);
     }
 }

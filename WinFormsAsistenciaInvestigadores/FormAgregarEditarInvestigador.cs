@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ApplicationBussines;
 using ApplicationBussines.DTOs;
 using ApplicationBussines.QueryObjects;
+using ApplicationBussines.UseCasesInvestigador;
 using Entities;
 
 namespace WinFormsAsistenciaInvestigadores

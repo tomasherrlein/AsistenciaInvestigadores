@@ -42,7 +42,10 @@ namespace Repository
 
         public async Task<IEnumerable<Investigador>> GetAllAsync()
         {
-            var investigadoresModels = await _dbContext.Investigadores.Include(i => i.Iddepartamentos).ToListAsync();
+            var investigadoresModels = await _dbContext.Investigadores
+                                            .Include(i => i.Iddepartamentos)
+                                            .Where(i => !i.Eliminado)
+                                            .ToListAsync();
             var investigadores = new List<Investigador>();
             
             foreach (var i in investigadoresModels) 
@@ -103,6 +106,48 @@ namespace Repository
 
             var investigadores = new List<Investigador>();
 
+            foreach (var i in investigadoresModels)
+            {
+                investigadores.Add(_mapperToEntity.Map(i));
+            }
+
+            return investigadores;
+        }
+
+        public async Task SoftDeleteAsync(int id)
+        {
+            var investigadorModel = await _dbContext.Investigadores.FindAsync(id);
+            if (investigadorModel == null)
+            {
+                throw new InvalidOperationException($"Investigador con ID {id} no encontrado para eliminación suave.");
+            }
+
+            investigadorModel.Eliminado = true; // Marcar como eliminado
+            _dbContext.Entry(investigadorModel).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task SoftRestoreAsync(int id)
+        {
+            var investigadorModel = await _dbContext.Investigadores.FindAsync(id);
+            if (investigadorModel == null)
+            {
+                throw new InvalidOperationException($"Investigador con ID {id} no encontrado para eliminación suave.");
+            }
+
+            investigadorModel.Eliminado = false; // Marcar como activo
+            _dbContext.Entry(investigadorModel).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Investigador>> GetAllEliminadosAsync()
+        {
+            var investigadoresModels = await _dbContext.Investigadores
+                                            .Include(i => i.Iddepartamentos)
+                                            .Where(i => i.Eliminado)
+                                            .ToListAsync();
+
+            var investigadores = new List<Investigador>();
             foreach (var i in investigadoresModels)
             {
                 investigadores.Add(_mapperToEntity.Map(i));

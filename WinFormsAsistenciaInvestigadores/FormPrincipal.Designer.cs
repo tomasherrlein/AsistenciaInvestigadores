@@ -38,6 +38,7 @@
             // 
             // btnFormInvestigadores
             // 
+            btnFormInvestigadores.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnFormInvestigadores.BackColor = SystemColors.GradientActiveCaption;
             btnFormInvestigadores.FlatAppearance.BorderColor = Color.Teal;
             btnFormInvestigadores.FlatStyle = FlatStyle.Flat;
@@ -51,6 +52,7 @@
             // 
             // button1
             // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             button1.BackColor = SystemColors.GradientActiveCaption;
             button1.FlatAppearance.BorderColor = Color.Teal;
             button1.FlatStyle = FlatStyle.Flat;
@@ -64,16 +66,20 @@
             // 
             // panel1
             // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel1.BackColor = SystemColors.GradientInactiveCaption;
             panel1.Controls.Add(button1);
             panel1.Controls.Add(btnFormInvestigadores);
             panel1.Location = new Point(212, 199);
+            panel1.MaximumSize = new Size(457, 142);
+            panel1.MinimumSize = new Size(457, 142);
             panel1.Name = "panel1";
             panel1.Size = new Size(457, 142);
             panel1.TabIndex = 2;
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -86,8 +92,11 @@
             // 
             // panel2
             // 
+            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel2.BackColor = SystemColors.ActiveCaption;
             panel2.Location = new Point(212, 111);
+            panel2.MaximumSize = new Size(457, 88);
+            panel2.MinimumSize = new Size(457, 88);
             panel2.Name = "panel2";
             panel2.Size = new Size(457, 88);
             panel2.TabIndex = 3;

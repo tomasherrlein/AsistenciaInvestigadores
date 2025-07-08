@@ -9,6 +9,7 @@ using Models;
 using ApplicationBussines.Mappers;
 using ApplicationBussines.QueryObjects;
 using System.Windows.Forms;
+using ApplicationBussines.UseCasesInvestigador;
 
 
 namespace WinFormsAsistenciaInvestigadores
@@ -40,7 +41,7 @@ namespace WinFormsAsistenciaInvestigadores
                 .Build();
                 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DBCasa"))
+                options.UseSqlServer(configuration.GetConnectionString("DB"))
                 .EnableSensitiveDataLogging());
 
             //Repositorys
@@ -56,6 +57,8 @@ namespace WinFormsAsistenciaInvestigadores
             //Use Cases
             services.AddScoped<AddInvestigador>();
             services.AddScoped<EditInvestigador>();
+            services.AddScoped<SoftDeleteInvestigador>();
+            services.AddScoped<SoftRestoreInvestigador>();
 
             //Forms
             services.AddTransient<FormPrincipal>();

@@ -4,6 +4,7 @@
     {
         public int IdInvestigador {  get; set; }
         public string Nombre { get; set; }
+        public bool Eliminado { get; set; }
 
         public ICollection<Asistencia> Asistencia { get; set; } = new List<Asistencia>();
 
