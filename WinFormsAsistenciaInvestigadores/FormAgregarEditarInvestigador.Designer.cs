@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             lblNombreCompleto = new Label();
-            textBox1 = new TextBox();
+            txtbNombre = new TextBox();
             btnCancelar = new Button();
             btnGuardar = new Button();
             panel2 = new Panel();
@@ -53,12 +53,12 @@
             lblNombreCompleto.TabIndex = 0;
             lblNombreCompleto.Text = "Nombre completo";
             // 
-            // textBox1
+            // txtbNombre
             // 
-            textBox1.Location = new Point(133, 9);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(245, 23);
-            textBox1.TabIndex = 1;
+            txtbNombre.Location = new Point(133, 9);
+            txtbNombre.Name = "txtbNombre";
+            txtbNombre.Size = new Size(245, 23);
+            txtbNombre.TabIndex = 1;
             // 
             // btnCancelar
             // 
@@ -78,11 +78,12 @@
             btnGuardar.TabIndex = 8;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // panel2
             // 
             panel2.BackColor = SystemColors.ActiveCaption;
-            panel2.Controls.Add(textBox1);
+            panel2.Controls.Add(txtbNombre);
             panel2.Controls.Add(lblNombreCompleto);
             panel2.Location = new Point(87, 63);
             panel2.Name = "panel2";
@@ -181,7 +182,7 @@
         #endregion
 
         private Label lblNombreCompleto;
-        private TextBox textBox1;
+        private TextBox txtbNombre;
         private Button btnCancelar;
         private Button btnGuardar;
         private Panel panel2;

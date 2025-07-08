@@ -8,6 +8,7 @@ namespace ApplicationBussines.QueryResults
 {
     public class InvestigadorConDepartamentosResult
     {
+        public int Id { get; set; }
         public string Nombre { get; set; }
         public string Departamentos { get; set; }
     }

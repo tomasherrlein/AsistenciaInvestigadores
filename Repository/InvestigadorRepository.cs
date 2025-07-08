@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using ApplicationBussines;
+﻿using ApplicationBussines;
+using ApplicationBussines.DTOs;
 using ApplicationBussines.Mappers;
 using Data;
 using Entities;
@@ -12,7 +12,6 @@ namespace Repository
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper<InvestigadorModel, Investigador> _mapperToEntity;
-
         public InvestigadorRepository(AppDbContext dbContext, 
             IMapper<InvestigadorModel, Investigador> mapperToEntity)
         {
@@ -22,12 +21,22 @@ namespace Repository
 
         public async Task AddAsync(Investigador investigador)
         {
-            var investigadorModel = new InvestigadorModel()
+            var investigadorModel = new InvestigadorModel
             {
-                Nombre = investigador.Nombre
+                Nombre = investigador.Nombre,
+                Iddepartamentos = new List<DepartamentoModel>()
             };
 
-            await _dbContext.AddAsync(investigadorModel);
+            foreach (var departamento in investigador.Iddepartamentos)
+            {
+                var existingDepartamento = await _dbContext.Departamentos.FindAsync(departamento.IDDepartamento);
+                if (existingDepartamento != null)
+                {
+                    investigadorModel.Iddepartamentos.Add(existingDepartamento);
+                }
+            }
+
+            await _dbContext.Investigadores.AddAsync(investigadorModel);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -46,21 +55,34 @@ namespace Repository
 
         public async Task<Investigador> GetByIdAsync(int id)
         {
-            var investigadorModel = await _dbContext.Investigadores.FindAsync(id);
+            var investigadorModel = await _dbContext.Investigadores
+                .Include(i => i.Iddepartamentos)
+                .FirstOrDefaultAsync(i => i.Idinvestigador == id);
 
-            return new Investigador
-            {
-                IdInvestigador = investigadorModel.Idinvestigador,
-                Nombre = investigadorModel.Nombre
-            };
+            if (investigadorModel == null) return null;
+
+            return _mapperToEntity.Map(investigadorModel);
         }
 
         public async Task EditAsync(Investigador investigador)
         {
-            var investigadorModel = await _dbContext.Investigadores.FindAsync(investigador.IdInvestigador);
+            var investigadorModel = await _dbContext.Investigadores
+                .Include(i => i.Iddepartamentos)
+                .FirstOrDefaultAsync(i => i.Idinvestigador == investigador.IdInvestigador);
+
+            if (investigadorModel == null) return;
 
             investigadorModel.Nombre = investigador.Nombre;
-            _dbContext.Entry(investigadorModel).State = EntityState.Modified;
+            investigadorModel.Iddepartamentos.Clear();
+
+            foreach (var departamento in investigador.Iddepartamentos)
+            {
+                var existingDepartamento = await _dbContext.Departamentos.FindAsync(departamento.IDDepartamento);
+                if (existingDepartamento != null)
+                {
+                    investigadorModel.Iddepartamentos.Add(existingDepartamento);
+                }
+            }
 
             await _dbContext.SaveChangesAsync();
         }

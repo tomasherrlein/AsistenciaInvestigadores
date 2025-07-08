@@ -52,6 +52,7 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToResizeColumns = false;
             dataGridView1.AllowUserToResizeRows = false;
+            
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -80,6 +81,8 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(550, 212);
             dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(
+            dataGridView1_CellContentClick);
             // 
             // btnFiltroMecanica
             // 

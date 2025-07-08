@@ -1,11 +1,5 @@
-﻿using ApplicationBussines;
+
 using ApplicationBussines.QueryResults;
-using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApplicationBussines.QueryObjects
 {
@@ -27,12 +21,24 @@ namespace ApplicationBussines.QueryObjects
             {
                 query.Add(new InvestigadorConDepartamentosResult()
                 {
+                    Id = i.IdInvestigador,
                     Nombre = i.Nombre,
-                    Departamentos = string.Join(",", i.Iddepartamentos.Select(d => d.Nombre)),
+                    Departamentos = string.Join(", ", i.Iddepartamentos.Select(d => d.Nombre)),
                 });
             }    
                 
             return query;
+        }
+
+        public async Task<InvestigadorConDepartamentosResult> ExecuteAsyncById(int id)
+        {
+            var investigador = await _repository.GetByIdAsync(id);
+            return new InvestigadorConDepartamentosResult
+            {
+                Id = investigador.IdInvestigador,
+                Nombre = investigador.Nombre,
+                Departamentos = string.Join(", ", investigador.Iddepartamentos.Select(d => d.Nombre))
+            };
         }
 
         public async Task<IEnumerable<InvestigadorConDepartamentosResult>> ExecuteAsyncFiltered(string nombreDepartamento)
@@ -44,8 +50,9 @@ namespace ApplicationBussines.QueryObjects
             {
                 query.Add(new InvestigadorConDepartamentosResult()
                 {
+                    Id = i.IdInvestigador,
                     Nombre = i.Nombre,
-                    Departamentos = string.Join(",", i.Iddepartamentos.Select(d => d.Nombre)),
+                    Departamentos = string.Join(", ", i.Iddepartamentos.Select(d => d.Nombre)),
                 });
             }
 

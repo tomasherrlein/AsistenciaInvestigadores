@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace ApplicationBussines.DTOs
 {
-    internal class InvestigadorDTO
+    public class InvestigadorDTO
     {
         public int Id { get; set; }
         public string Nombre {  get; set; }
-        public ICollection<DepartamentoDTO> Departamentos { get; set; }
+        public ICollection<int> IdDepartamentos { get; set; }
     }
 }

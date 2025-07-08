@@ -3,27 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ApplicationBussines.DTOs;
 using Entities;
 
 namespace ApplicationBussines
 {
     public class AddInvestigador
     {
-        private readonly IRepository<Investigador> _repository;
+        private readonly IInvestigadorRepository _investigadorRepository;
+        private readonly IRepository<Departamento> _departamentoRepository;
 
-        public AddInvestigador(IRepository<Investigador> repository)
+        public AddInvestigador(IInvestigadorRepository investigadorRepository,
+            IRepository<Departamento> departamentoRepository)
         {
-            _repository = repository;
+            _investigadorRepository = investigadorRepository;
+            _departamentoRepository = departamentoRepository;
         }
 
-        public async Task ExecuteAsync(Investigador investigador)
+        public async Task ExecuteAsync(InvestigadorDTO investigadorDTO)
         {
-            if (string.IsNullOrEmpty(investigador.Nombre))
+            if (string.IsNullOrEmpty(investigadorDTO.Nombre))
             {
                 throw new Exception("El nombre del investigador es obligatorio");
             }
 
-            await _repository.AddAsync(investigador);
+            if (investigadorDTO.IdDepartamentos == null || investigadorDTO.IdDepartamentos.Count() == 0)
+            {
+                throw new ArgumentException("Debe seleccionar al menos un departamento para el investigador.");
+            }
+
+            var nuevoInvestigador = new Investigador
+            {
+                Nombre = investigadorDTO.Nombre,
+                Iddepartamentos = new List<Departamento>()
+            };
+
+            foreach (var id in investigadorDTO.IdDepartamentos) {
+                var departamento = await _departamentoRepository.GetByIdAsync(id);
+
+                if (departamento == null)
+                {
+                    throw new InvalidOperationException($"El departamento con ID {id} no se encontró.");
+                }
+
+                nuevoInvestigador.Iddepartamentos.Add(departamento);
+            }
+
+            await _investigadorRepository.AddAsync(nuevoInvestigador);
         }
     }
 }

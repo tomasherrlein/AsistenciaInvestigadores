@@ -19,13 +19,17 @@ namespace WinFormsAsistenciaInvestigadores
 
         private IServiceProvider _serviceProvider;
         private InvestigadorConDepartamentosQuery _query;
+        private IInvestigadorRepository _repository;
 
-        public FormInvestigadores(IServiceProvider serviceProvider, 
-            InvestigadorConDepartamentosQuery query)
+        public FormInvestigadores(IServiceProvider serviceProvider,
+            InvestigadorConDepartamentosQuery query,
+            IInvestigadorRepository repository)
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
             _query = query;
+            _repository = repository;
+
         }
 
 
@@ -40,6 +44,10 @@ namespace WinFormsAsistenciaInvestigadores
             var investigadores = await _query.ExecuteAsync();
 
             dataGridView1.DataSource = investigadores;
+            if (dataGridView1.Columns.Contains("Id"))
+            {
+                dataGridView1.Columns["Id"].Visible = false;
+            }
         }
 
         private async void btnFiltroMecanica_Click(object sender, EventArgs e)
@@ -75,6 +83,7 @@ namespace WinFormsAsistenciaInvestigadores
         {
             var formAgregar = _serviceProvider.GetRequiredService<FormAgregarEditarInvestigador>();
             formAgregar.ShowDialog();
+            Reload();
         }
 
         private void AgregarColumnas()
@@ -86,7 +95,8 @@ namespace WinFormsAsistenciaInvestigadores
             editButtonColumn.UseColumnTextForButtonValue = true;
             editButtonColumn.DefaultCellStyle.BackColor = Color.Blue;
             dataGridView1.Columns.Add(editButtonColumn);
-
+            
+            
             DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
             deleteButtonColumn.Name = "DeleteButton";
             deleteButtonColumn.HeaderText = "";
@@ -95,6 +105,28 @@ namespace WinFormsAsistenciaInvestigadores
             deleteButtonColumn.DefaultCellStyle.BackColor = Color.Red;
             deleteButtonColumn.DefaultCellStyle.ForeColor = Color.Red;
             dataGridView1.Columns.Add(deleteButtonColumn);
+        }
+
+        private async void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var investigadorId = (int)dataGridView1.Rows[e.RowIndex].Cells["Id"].Value;
+
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "EditButton")
+            {
+                var form = _serviceProvider.GetRequiredService<FormAgregarEditarInvestigador>();
+                var investigador = await _repository.GetByIdAsync(investigadorId);
+                var investigadorDto = new ApplicationBussines.DTOs.InvestigadorDTO
+                {
+                    Id = investigador.IdInvestigador,
+                    Nombre = investigador.Nombre,
+                    IdDepartamentos = investigador.Iddepartamentos.Select(d => d.IDDepartamento).ToList()
+                };
+                form.LoadData(investigadorDto);
+                form.ShowDialog();
+                Reload();
+            }
         }
     }
 }

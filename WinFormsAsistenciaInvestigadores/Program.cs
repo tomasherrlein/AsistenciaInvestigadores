@@ -40,16 +40,22 @@ namespace WinFormsAsistenciaInvestigadores
                 .Build();
                 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DB")));
+                options.UseSqlServer(configuration.GetConnectionString("DBCasa"))
+                .EnableSensitiveDataLogging());
 
             //Repositorys
-            services.AddTransient<IInvestigadorRepository, InvestigadorRepository>();
-            
+            services.AddScoped<IInvestigadorRepository, InvestigadorRepository>();
+            services.AddScoped<IRepository<Departamento>, DepartamentoRepository>();
+
             //Mappers
-            services.AddTransient<IMapper<InvestigadorModel, Investigador>, MapperModelToInvestigadorEntity>();
+            services.AddScoped<IMapper<InvestigadorModel, Investigador>, MapperModelToInvestigadorEntity>();
 
             //Querys
-            services.AddTransient<InvestigadorConDepartamentosQuery>();
+            services.AddScoped<InvestigadorConDepartamentosQuery>();
+
+            //Use Cases
+            services.AddScoped<AddInvestigador>();
+            services.AddScoped<EditInvestigador>();
 
             //Forms
             services.AddTransient<FormPrincipal>();
