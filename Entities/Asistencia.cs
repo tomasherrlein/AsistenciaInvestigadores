@@ -9,8 +9,8 @@ namespace Entities
     public class Asistencia
     {
         public int IDAsistencia { get; set; }
-        public string IDInvestigador { get; set; }
-        public DateTime Fecha { get; set; }
+        public int IDInvestigador { get; set; }
+        public DateOnly Fecha { get; set; }
         public TimeOnly HoraEntrada { get; set; }
         public TimeOnly HoraSalida { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationBussines.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,5 +17,17 @@ namespace WinFormsAsistenciaInvestigadores
         {
             InitializeComponent();
         }
+        
+        public async Task LoadEditData(int idInvestigador)
+        {
+            
+        }
+
+        public async Task LoadAddData (int idInvestigador)
+        {
+
+        }
+
     }
+
 }

@@ -16,7 +16,7 @@ namespace Models
 
         public TimeOnly HoraEntrada { get; set; }
 
-        public TimeOnly? HoraSalida { get; set; }
+        public TimeOnly HoraSalida { get; set; }
 
         public virtual InvestigadorModel IdinvestigadorNavigation { get; set; } = null!;
     }

@@ -72,6 +72,7 @@ namespace WinFormsAsistenciaInvestigadores
         {
             string[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
             cboMeses.DataSource = meses;
+            cboMeses.SelectedIndex = DateTime.Now.Month - 1;
         }
 
         private void btnCargarAsistencias_Click(object sender, EventArgs e)
@@ -81,8 +82,6 @@ namespace WinFormsAsistenciaInvestigadores
                 MessageBox.Show("Fuera del rango establecido (+1900)", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-
 
             if (cboMeses.SelectedIndex == -1)
             {
@@ -103,14 +102,6 @@ namespace WinFormsAsistenciaInvestigadores
 
             lblNombreMes.Text = cboMeses.SelectedItem.ToString();
             lblAnioSeleccionado.Text = anio.ToString();
-        }
-
-        private void txtbAnio_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true; // Ignora la pulsación de tecla
-            }
         }
 
         private async void btnFiltroMecanica_Click(object sender, EventArgs e)
