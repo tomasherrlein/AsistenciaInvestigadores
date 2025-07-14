@@ -23,6 +23,7 @@ namespace WinFormsAsistenciaInvestigadores
         static void Main()
         {
             Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
 
             var services = new ServiceCollection();
@@ -41,24 +42,23 @@ namespace WinFormsAsistenciaInvestigadores
                 .Build();
                 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DB"))
-                .EnableSensitiveDataLogging());
+                options.UseSqlServer(configuration.GetConnectionString("DBCasa")));
 
             //Repositorys
-            services.AddScoped<IInvestigadorRepository, InvestigadorRepository>();
-            services.AddScoped<IRepository<Departamento>, DepartamentoRepository>();
+            services.AddTransient<IInvestigadorRepository, InvestigadorRepository>();
+            services.AddTransient<IRepository<Departamento>, DepartamentoRepository>();
 
             //Mappers
-            services.AddScoped<IMapper<InvestigadorModel, Investigador>, MapperModelToInvestigadorEntity>();
+            services.AddTransient<IMapper<InvestigadorModel, Investigador>, MapperModelToInvestigadorEntity>();
 
             //Querys
-            services.AddScoped<InvestigadorConDepartamentosQuery>();
+            services.AddTransient<InvestigadorConDepartamentosQuery>();
 
             //Use Cases
-            services.AddScoped<AddInvestigador>();
-            services.AddScoped<EditInvestigador>();
-            services.AddScoped<SoftDeleteInvestigador>();
-            services.AddScoped<SoftRestoreInvestigador>();
+            services.AddTransient<AddInvestigador>();
+            services.AddTransient<EditInvestigador>();
+            services.AddTransient<SoftDeleteInvestigador>();
+            services.AddTransient<SoftRestoreInvestigador>();
 
             //Forms
             services.AddTransient<FormPrincipal>();

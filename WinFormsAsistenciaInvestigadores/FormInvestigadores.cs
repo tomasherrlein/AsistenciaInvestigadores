@@ -185,6 +185,7 @@ namespace WinFormsAsistenciaInvestigadores
                 };
                 form.LoadData(investigadorDto);
                 form.ShowDialog();
+                await Reload();
             }
 
             if (dataGridView1.Columns[e.ColumnIndex].Name == "DeleteButton")
@@ -194,6 +195,7 @@ namespace WinFormsAsistenciaInvestigadores
                 {
                     await _softDelete.ExecuteAsync(investigadorId);
                 }
+                await Reload();
             }
 
             if (dataGridView1.Columns[e.ColumnIndex].Name == "RestoreButton")
@@ -203,9 +205,11 @@ namespace WinFormsAsistenciaInvestigadores
                 {
                     await _softRestore.ExecuteAsync(investigadorId);
                 }
+
+                await Reload();
             }
 
-            await Reload();
+            
         }
 
         private async void btnMostrarEliminados_Click(object sender, EventArgs e)
