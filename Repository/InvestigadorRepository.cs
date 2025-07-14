@@ -44,8 +44,10 @@ namespace Repository
         {
             var investigadoresModels = await _dbContext.Investigadores
                                             .Include(i => i.Iddepartamentos)
+                                            .Include(i => i.Asistencia)
                                             .Where(i => !i.Eliminado)
                                             .ToListAsync();
+
             var investigadores = new List<Investigador>();
             
             foreach (var i in investigadoresModels) 

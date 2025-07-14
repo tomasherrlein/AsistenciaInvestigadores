@@ -1,10 +1,14 @@
-﻿namespace WinFormsAsistenciaInvestigadores
+﻿using ApplicationBussines.QueryObjects;
+
+namespace WinFormsAsistenciaInvestigadores
 {
     public partial class FormAsistenciasInvestigador : Form
     {
-        public FormAsistenciasInvestigador()
+        private InvestigadorConDepartamentosQuery _query;
+        public FormAsistenciasInvestigador(InvestigadorConDepartamentosQuery query)
         {
             InitializeComponent();
+            _query = query;
         }
 
         private void CargarCalendario(int año, int mes)
@@ -29,7 +33,7 @@
                     {
                         DateTime fecha = new DateTime(año, mes, diaActual);
                         btn.Text = diaActual.ToString();
- 
+
                         btn.Tag = fecha;
                         btn.Click += BtnCalendario_Click;
                         diaActual++;
@@ -50,10 +54,52 @@
             //Abrir un nuevo form para agregar o editar asistencia.
         }
 
-        private void FormPrincipal_Load(object sender, EventArgs e)
+        private async void FormPrincipal_Load(object sender, EventArgs e)
         {
-            ///TODO: Cambiarlo por una fecha actual o seleccionada.
-            CargarCalendario(2025, 7);
+            LoadMonths();
+
+            await Reload();
+            dataGridView1.Columns["Id"].Visible = false;
+        }
+
+        private async Task Reload()
+        {
+            dataGridView1.DataSource = await _query.ExecuteAsync();
+        }
+
+        private void LoadMonths()
+        {
+            string[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+            cboMeses.DataSource = meses;
+        }
+
+        private void btnCargarAsistencias_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtbAnio.Text))
+            {
+                MessageBox.Show("El año no puede estar vacío.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (cboMeses.SelectedIndex == -1)
+            {
+                MessageBox.Show("Debe seleccionar un mes", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            int anio = int.Parse(txtbAnio.Text);
+            int mes = cboMeses.SelectedIndex + 1;
+            CargarCalendario(anio, mes);
+
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+                string nombre = selectedRow.Cells[1].Value.ToString();
+                lblNombreInvestigador.Text = nombre;
+            }
+
+            lblNombreMes.Text = cboMeses.SelectedItem.ToString();
+            lblAnioSeleccionado.Text = anio.ToString();
         }
     }
 }
