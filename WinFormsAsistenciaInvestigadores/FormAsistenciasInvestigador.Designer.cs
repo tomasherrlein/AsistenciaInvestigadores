@@ -40,8 +40,8 @@
             btnFiltroLimpiar = new Button();
             dataGridView1 = new DataGridView();
             panelFiltro = new Panel();
+            numericUpDownAnio = new NumericUpDown();
             label3 = new Label();
-            txtbAnio = new TextBox();
             btnCargarAsistencias = new Button();
             label4 = new Label();
             cboMeses = new ComboBox();
@@ -53,9 +53,15 @@
             lblAnioSeleccionado = new Label();
             label5 = new Label();
             label6 = new Label();
+            panel2 = new Panel();
+            panel3 = new Panel();
+            panel4 = new Panel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panelFiltro.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownAnio).BeginInit();
+            panel2.SuspendLayout();
+            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -68,7 +74,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.2857151F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.2857151F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.2857151F));
-            tableLayoutPanel1.Location = new Point(12, 83);
+            tableLayoutPanel1.Location = new Point(10, 64);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
@@ -76,14 +82,15 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.Size = new Size(764, 402);
+            tableLayoutPanel1.Size = new Size(687, 402);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
             // 
             label1.AutoSize = true;
+            label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(19, 29);
+            label1.Location = new Point(17, 10);
             label1.Name = "label1";
             label1.Size = new Size(127, 30);
             label1.TabIndex = 1;
@@ -93,7 +100,7 @@
             // 
             lblNombreMes.AutoSize = true;
             lblNombreMes.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNombreMes.Location = new Point(82, 510);
+            lblNombreMes.Location = new Point(69, 6);
             lblNombreMes.Name = "lblNombreMes";
             lblNombreMes.Size = new Size(0, 30);
             lblNombreMes.TabIndex = 2;
@@ -101,8 +108,9 @@
             // lblNombreInvestigador
             // 
             lblNombreInvestigador.AutoSize = true;
+            lblNombreInvestigador.BackColor = SystemColors.ActiveCaption;
             lblNombreInvestigador.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNombreInvestigador.Location = new Point(180, 29);
+            lblNombreInvestigador.Location = new Point(178, 10);
             lblNombreInvestigador.Name = "lblNombreInvestigador";
             lblNombreInvestigador.Size = new Size(0, 30);
             lblNombreInvestigador.TabIndex = 3;
@@ -111,7 +119,7 @@
             // 
             panel1.BackColor = SystemColors.ActiveCaption;
             panel1.Controls.Add(label2);
-            panel1.Location = new Point(863, 72);
+            panel1.Location = new Point(770, 20);
             panel1.Name = "panel1";
             panel1.Size = new Size(580, 32);
             panel1.TabIndex = 16;
@@ -132,7 +140,7 @@
             lblFiltros.AutoSize = true;
             lblFiltros.BackColor = SystemColors.GradientInactiveCaption;
             lblFiltros.Font = new Font("Segoe UI Black", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFiltros.Location = new Point(881, 126);
+            lblFiltros.Location = new Point(788, 74);
             lblFiltros.Name = "lblFiltros";
             lblFiltros.Size = new Size(158, 15);
             lblFiltros.TabIndex = 15;
@@ -150,6 +158,7 @@
             btnFiltroLimpiar.TabIndex = 12;
             btnFiltroLimpiar.Text = "Limpiar filtro";
             btnFiltroLimpiar.UseVisualStyleBackColor = true;
+            btnFiltroLimpiar.Click += btnFiltroLimpiar_Click;
             // 
             // dataGridView1
             // 
@@ -168,7 +177,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(876, 202);
+            dataGridView1.Location = new Point(783, 150);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -190,8 +199,8 @@
             // 
             panelFiltro.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelFiltro.BackColor = SystemColors.GradientInactiveCaption;
+            panelFiltro.Controls.Add(numericUpDownAnio);
             panelFiltro.Controls.Add(label3);
-            panelFiltro.Controls.Add(txtbAnio);
             panelFiltro.Controls.Add(btnCargarAsistencias);
             panelFiltro.Controls.Add(label4);
             panelFiltro.Controls.Add(cboMeses);
@@ -201,13 +210,23 @@
             panelFiltro.Controls.Add(btnFiltroCivil);
             panelFiltro.Controls.Add(btnFiltroElectrica);
             panelFiltro.Controls.Add(btnFiltroMecanica);
-            panelFiltro.Location = new Point(863, 103);
+            panelFiltro.Location = new Point(770, 51);
             panelFiltro.Name = "panelFiltro";
             panelFiltro.Size = new Size(580, 389);
             panelFiltro.TabIndex = 14;
             // 
+            // numericUpDownAnio
+            // 
+            numericUpDownAnio.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            numericUpDownAnio.Location = new Point(338, 357);
+            numericUpDownAnio.Maximum = new decimal(new int[] { 3000, 0, 0, 0 });
+            numericUpDownAnio.Name = "numericUpDownAnio";
+            numericUpDownAnio.Size = new Size(120, 23);
+            numericUpDownAnio.TabIndex = 19;
+            // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label3.AutoSize = true;
             label3.BackColor = SystemColors.GradientInactiveCaption;
             label3.Font = new Font("Segoe UI Black", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -216,13 +235,6 @@
             label3.Size = new Size(35, 15);
             label3.TabIndex = 18;
             label3.Text = "Año ";
-            // 
-            // txtbAnio
-            // 
-            txtbAnio.Location = new Point(338, 357);
-            txtbAnio.Name = "txtbAnio";
-            txtbAnio.Size = new Size(119, 23);
-            txtbAnio.TabIndex = 18;
             // 
             // btnCargarAsistencias
             // 
@@ -240,6 +252,7 @@
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label4.AutoSize = true;
             label4.BackColor = SystemColors.GradientInactiveCaption;
             label4.Font = new Font("Segoe UI Black", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -251,6 +264,7 @@
             // 
             // cboMeses
             // 
+            cboMeses.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             cboMeses.DropDownStyle = ComboBoxStyle.DropDownList;
             cboMeses.FormattingEnabled = true;
             cboMeses.Location = new Point(122, 359);
@@ -287,6 +301,7 @@
             btnFiltroAutomotriz.TabIndex = 4;
             btnFiltroAutomotriz.Text = "Automotriz";
             btnFiltroAutomotriz.UseVisualStyleBackColor = false;
+            btnFiltroAutomotriz.Click += btnFiltroAutomotriz_Click;
             // 
             // btnFiltroCivil
             // 
@@ -303,6 +318,7 @@
             btnFiltroCivil.TabIndex = 3;
             btnFiltroCivil.Text = "Civil";
             btnFiltroCivil.UseVisualStyleBackColor = false;
+            btnFiltroCivil.Click += btnFiltroCivil_Click;
             // 
             // btnFiltroElectrica
             // 
@@ -319,6 +335,7 @@
             btnFiltroElectrica.TabIndex = 2;
             btnFiltroElectrica.Text = "Eléctrica";
             btnFiltroElectrica.UseVisualStyleBackColor = false;
+            btnFiltroElectrica.Click += btnFiltroElectrica_Click;
             // 
             // btnFiltroMecanica
             // 
@@ -335,12 +352,13 @@
             btnFiltroMecanica.TabIndex = 1;
             btnFiltroMecanica.Text = "Mecánica";
             btnFiltroMecanica.UseVisualStyleBackColor = false;
+            btnFiltroMecanica.Click += btnFiltroMecanica_Click;
             // 
             // lblAnioSeleccionado
             // 
             lblAnioSeleccionado.AutoSize = true;
             lblAnioSeleccionado.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAnioSeleccionado.Location = new Point(306, 510);
+            lblAnioSeleccionado.Location = new Point(293, 6);
             lblAnioSeleccionado.Name = "lblAnioSeleccionado";
             lblAnioSeleccionado.Size = new Size(0, 30);
             lblAnioSeleccionado.TabIndex = 17;
@@ -349,7 +367,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(19, 510);
+            label5.Location = new Point(6, 6);
             label5.Name = "label5";
             label5.Size = new Size(63, 30);
             label5.TabIndex = 18;
@@ -359,37 +377,70 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI Black", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(238, 510);
+            label6.Location = new Point(225, 6);
             label6.Name = "label6";
             label6.Size = new Size(62, 30);
             label6.TabIndex = 19;
             label6.Text = "Año:";
+            // 
+            // panel2
+            // 
+            panel2.BackColor = SystemColors.GradientInactiveCaption;
+            panel2.Controls.Add(panel3);
+            panel2.Controls.Add(lblNombreInvestigador);
+            panel2.Controls.Add(label1);
+            panel2.Controls.Add(tableLayoutPanel1);
+            panel2.Controls.Add(panel4);
+            panel2.Location = new Point(2, 19);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(709, 540);
+            panel2.TabIndex = 20;
+            // 
+            // panel3
+            // 
+            panel3.BackColor = SystemColors.ActiveCaption;
+            panel3.Controls.Add(label6);
+            panel3.Controls.Add(label5);
+            panel3.Controls.Add(lblAnioSeleccionado);
+            panel3.Controls.Add(lblNombreMes);
+            panel3.Location = new Point(11, 485);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(436, 44);
+            panel3.TabIndex = 20;
+            // 
+            // panel4
+            // 
+            panel4.BackColor = SystemColors.ActiveCaption;
+            panel4.Location = new Point(0, 0);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(711, 47);
+            panel4.TabIndex = 21;
             // 
             // FormAsistenciasInvestigador
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.InactiveCaption;
-            ClientSize = new Size(1466, 738);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(lblAnioSeleccionado);
+            ClientSize = new Size(1370, 738);
+            Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(lblFiltros);
             Controls.Add(dataGridView1);
             Controls.Add(panelFiltro);
-            Controls.Add(lblNombreInvestigador);
-            Controls.Add(lblNombreMes);
-            Controls.Add(label1);
-            Controls.Add(tableLayoutPanel1);
             Name = "FormAsistenciasInvestigador";
             Text = "Formulario Asistencias";
+            WindowState = FormWindowState.Maximized;
             Load += FormPrincipal_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panelFiltro.ResumeLayout(false);
             panelFiltro.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownAnio).EndInit();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -414,10 +465,13 @@
         private Label label4;
         private ComboBox cboMeses;
         private Button btnCargarAsistencias;
-        private TextBox txtbAnio;
         private Label label3;
         private Label lblAnioSeleccionado;
         private Label label5;
         private Label label6;
+        private Panel panel2;
+        private Panel panel3;
+        private Panel panel4;
+        private NumericUpDown numericUpDownAnio;
     }
 }

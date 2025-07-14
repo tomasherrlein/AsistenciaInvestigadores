@@ -1,4 +1,5 @@
 ﻿using ApplicationBussines.QueryObjects;
+using System.Threading.Tasks;
 
 namespace WinFormsAsistenciaInvestigadores
 {
@@ -57,7 +58,7 @@ namespace WinFormsAsistenciaInvestigadores
         private async void FormPrincipal_Load(object sender, EventArgs e)
         {
             LoadMonths();
-
+            numericUpDownAnio.Value = DateTime.Now.Year;
             await Reload();
             dataGridView1.Columns["Id"].Visible = false;
         }
@@ -75,18 +76,20 @@ namespace WinFormsAsistenciaInvestigadores
 
         private void btnCargarAsistencias_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtbAnio.Text))
+            if (numericUpDownAnio.Value < 1900)
             {
-                MessageBox.Show("El año no puede estar vacío.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Fuera del rango establecido (+1900)", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+
 
             if (cboMeses.SelectedIndex == -1)
             {
                 MessageBox.Show("Debe seleccionar un mes", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
-            int anio = int.Parse(txtbAnio.Text);
+            int anio = ((int)numericUpDownAnio.Value);
             int mes = cboMeses.SelectedIndex + 1;
             CargarCalendario(anio, mes);
 
@@ -100,6 +103,39 @@ namespace WinFormsAsistenciaInvestigadores
 
             lblNombreMes.Text = cboMeses.SelectedItem.ToString();
             lblAnioSeleccionado.Text = anio.ToString();
+        }
+
+        private void txtbAnio_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Ignora la pulsación de tecla
+            }
+        }
+
+        private async void btnFiltroMecanica_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = await _query.ExecuteAsyncFiltered("Mecánica");
+        }
+
+        private async void btnFiltroElectrica_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = await _query.ExecuteAsyncFiltered("Eléctrica");
+        }
+
+        private async void btnFiltroCivil_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = await _query.ExecuteAsyncFiltered("Civil");
+        }
+
+        private async void btnFiltroAutomotriz_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = await _query.ExecuteAsyncFiltered("Automotriz");
+        }
+
+        private async void btnFiltroLimpiar_Click(object sender, EventArgs e)
+        {
+            await Reload();
         }
     }
 }
