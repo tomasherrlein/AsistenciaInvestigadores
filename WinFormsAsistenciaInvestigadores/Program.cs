@@ -42,11 +42,12 @@ namespace WinFormsAsistenciaInvestigadores
                 .Build();
                 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DB")));
+                options.UseSqlServer(configuration.GetConnectionString("DBCasa")));
 
             //Repositorys
             services.AddTransient<IInvestigadorRepository, InvestigadorRepository>();
             services.AddTransient<IRepository<Departamento>, DepartamentoRepository>();
+            services.AddTransient<IAsistenciaRepository, AsistenciaRepository>();
 
             //Mappers
             services.AddTransient<IMapper<InvestigadorModel, Investigador>, MapperModelToInvestigadorEntity>();

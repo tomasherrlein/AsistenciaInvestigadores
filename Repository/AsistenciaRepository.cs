@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    internal class AsistenciaRepository : IAsistenciaRepository
+    public class AsistenciaRepository : IAsistenciaRepository
     {
         private readonly AppDbContext _dbContext;
 
@@ -71,12 +71,15 @@ namespace Repository
         {
             var asistenciaModel = await _dbContext.Asistencias.FindAsync(asistencia.IDAsistencia);
 
-            asistenciaModel.Fecha = asistencia.Fecha;
-            asistenciaModel.HoraEntrada = asistencia.HoraEntrada;
-            asistenciaModel.HoraSalida = asistencia.HoraSalida;
+            if (asistenciaModel != null)
+            {
+                asistenciaModel.Fecha = asistencia.Fecha;
+                asistenciaModel.HoraEntrada = asistencia.HoraEntrada;
+                asistenciaModel.HoraSalida = asistencia.HoraSalida;
 
-            _dbContext.Entry(asistenciaModel).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Entry(asistenciaModel).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(int id)
