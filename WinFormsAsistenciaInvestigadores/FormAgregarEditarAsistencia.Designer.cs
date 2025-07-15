@@ -28,73 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dtpHoraEntrada = new System.Windows.Forms.DateTimePicker();
-            this.dtpHoraSalida = new System.Windows.Forms.DateTimePicker();
-            this.lblHoraEntrada = new System.Windows.Forms.Label();
-            this.lblHoraSalida = new System.Windows.Forms.Label();
-            this.btnGuardar = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            dtpHoraEntrada = new DateTimePicker();
+            dtpHoraSalida = new DateTimePicker();
+            lblHoraEntrada = new Label();
+            lblHoraSalida = new Label();
+            btnGuardar = new Button();
+            btnEliminar = new Button();
+            SuspendLayout();
             // 
             // dtpHoraEntrada
             // 
-            this.dtpHoraEntrada.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtpHoraEntrada.Location = new System.Drawing.Point(150, 50);
-            this.dtpHoraEntrada.Name = "dtpHoraEntrada";
-            this.dtpHoraEntrada.ShowUpDown = true;
-            this.dtpHoraEntrada.Size = new System.Drawing.Size(200, 23);
-            this.dtpHoraEntrada.TabIndex = 0;
+            dtpHoraEntrada.CustomFormat = "HH:mm";
+            dtpHoraEntrada.Format = DateTimePickerFormat.Custom;
+            dtpHoraEntrada.Location = new Point(261, 50);
+            dtpHoraEntrada.Name = "dtpHoraEntrada";
+            dtpHoraEntrada.ShowUpDown = true;
+            dtpHoraEntrada.Size = new Size(72, 23);
+            dtpHoraEntrada.TabIndex = 0;
             // 
             // dtpHoraSalida
             // 
-            this.dtpHoraSalida.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtpHoraSalida.Location = new System.Drawing.Point(150, 100);
-            this.dtpHoraSalida.Name = "dtpHoraSalida";
-            this.dtpHoraSalida.ShowUpDown = true;
-            this.dtpHoraSalida.Size = new System.Drawing.Size(200, 23);
-            this.dtpHoraSalida.TabIndex = 1;
+            dtpHoraSalida.CustomFormat = "HH:mm";
+            dtpHoraSalida.Format = DateTimePickerFormat.Custom;
+            dtpHoraSalida.Location = new Point(261, 100);
+            dtpHoraSalida.Name = "dtpHoraSalida";
+            dtpHoraSalida.ShowUpDown = true;
+            dtpHoraSalida.Size = new Size(72, 23);
+            dtpHoraSalida.TabIndex = 1;
             // 
             // lblHoraEntrada
             // 
-            this.lblHoraEntrada.AutoSize = true;
-            this.lblHoraEntrada.Location = new System.Drawing.Point(50, 55);
-            this.lblHoraEntrada.Name = "lblHoraEntrada";
-            this.lblHoraEntrada.Size = new System.Drawing.Size(82, 15);
-            this.lblHoraEntrada.TabIndex = 2;
-            this.lblHoraEntrada.Text = "Hora Entrada:";
+            lblHoraEntrada.AutoSize = true;
+            lblHoraEntrada.Location = new Point(161, 55);
+            lblHoraEntrada.Name = "lblHoraEntrada";
+            lblHoraEntrada.Size = new Size(79, 15);
+            lblHoraEntrada.TabIndex = 2;
+            lblHoraEntrada.Text = "Hora Entrada:";
             // 
             // lblHoraSalida
             // 
-            this.lblHoraSalida.AutoSize = true;
-            this.lblHoraSalida.Location = new System.Drawing.Point(50, 105);
-            this.lblHoraSalida.Name = "lblHoraSalida";
-            this.lblHoraSalida.Size = new System.Drawing.Size(73, 15);
-            this.lblHoraSalida.TabIndex = 3;
-            this.lblHoraSalida.Text = "Hora Salida:";
+            lblHoraSalida.AutoSize = true;
+            lblHoraSalida.Location = new Point(161, 105);
+            lblHoraSalida.Name = "lblHoraSalida";
+            lblHoraSalida.Size = new Size(70, 15);
+            lblHoraSalida.TabIndex = 3;
+            lblHoraSalida.Text = "Hora Salida:";
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(200, 150);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(100, 30);
-            this.btnGuardar.TabIndex = 4;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
-            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            btnGuardar.Location = new Point(118, 152);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(100, 30);
+            btnGuardar.TabIndex = 4;
+            btnGuardar.Text = "Guardar";
+            btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.Location = new Point(261, 152);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(100, 30);
+            btnEliminar.TabIndex = 5;
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // FormAgregarEditarAsistencia
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 211);
-            this.Controls.Add(this.btnGuardar);
-            this.Controls.Add(this.lblHoraSalida);
-            this.Controls.Add(this.lblHoraEntrada);
-            this.Controls.Add(this.dtpHoraSalida);
-            this.Controls.Add(this.dtpHoraEntrada);
-            this.Name = "FormAgregarEditarAsistencia";
-            this.Text = "Formulario Asistencia";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(484, 211);
+            Controls.Add(btnEliminar);
+            Controls.Add(btnGuardar);
+            Controls.Add(lblHoraSalida);
+            Controls.Add(lblHoraEntrada);
+            Controls.Add(dtpHoraSalida);
+            Controls.Add(dtpHoraEntrada);
+            Name = "FormAgregarEditarAsistencia";
+            Text = "Formulario Asistencia";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -104,5 +118,6 @@
         private System.Windows.Forms.Label lblHoraEntrada;
         private System.Windows.Forms.Label lblHoraSalida;
         private System.Windows.Forms.Button btnGuardar;
+        private Button btnEliminar;
     }
 }

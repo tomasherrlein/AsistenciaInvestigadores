@@ -69,17 +69,14 @@ namespace Repository
 
         public async Task EditAsync(Asistencia asistencia)
         {
+
             var asistenciaModel = await _dbContext.Asistencias.FindAsync(asistencia.IDAsistencia);
 
-            if (asistenciaModel != null)
-            {
-                asistenciaModel.Fecha = asistencia.Fecha;
-                asistenciaModel.HoraEntrada = asistencia.HoraEntrada;
-                asistenciaModel.HoraSalida = asistencia.HoraSalida;
+            asistenciaModel.HoraEntrada = asistencia.HoraEntrada;
+            asistenciaModel.HoraSalida = asistencia.HoraSalida;
 
-                _dbContext.Entry(asistenciaModel).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Entry(asistenciaModel).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
@@ -101,6 +98,7 @@ namespace Repository
                                         a.Fecha <= fechaFin)
                             .Select (a => new Asistencia
                             {
+                                IDAsistencia = a.Idasistencia,
                                 IDInvestigador = a.Idinvestigador,
                                 Fecha = a.Fecha,
                                 HoraEntrada = a.HoraEntrada,

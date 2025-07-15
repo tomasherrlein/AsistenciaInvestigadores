@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationBussines
+namespace ApplicationBussines.UseCasesAsistencia
 {
-    internal class AddAsistencia
+    public class AddAsistencia
     {
-        private readonly IRepository<Asistencia> _repository;
+        private readonly IAsistenciaRepository _repository;
 
-        public AddAsistencia(IRepository<Asistencia> repository) 
+        public AddAsistencia(IAsistenciaRepository repository) 
         { 
             _repository = repository; 
         }

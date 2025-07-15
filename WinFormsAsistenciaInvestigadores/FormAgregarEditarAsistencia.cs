@@ -1,5 +1,8 @@
 ﻿using ApplicationBussines;
+using ApplicationBussines.UseCasesAsistencia;
+using ApplicationBussines.UseCasesInvestigador;
 using Entities;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Windows.Forms;
 
@@ -7,32 +10,39 @@ namespace WinFormsAsistenciaInvestigadores
 {
     public partial class FormAgregarEditarAsistencia : Form
     {
-        private readonly IAsistenciaRepository _asistenciaRepository;
-        private Asistencia asistenciaActual;
-        private bool esEdicion = false;
-        private int investigadorId;
-        private DateTime fechaAsistencia;
+        private readonly AddAsistencia _addAsistencia;
+        private readonly EditAsistencia _editAsistencia;
+        private readonly DeleteAsistencia _deleteAsistencia;
+        private Asistencia? _asistenciaActual;
+        private bool _esEdicion = false;
+        private int _investigadorId;
+        private DateTime _fechaAsistencia;
 
-        // Constructor para AGREGAR
-        public FormAgregarEditarAsistencia(int idInvestigador, DateTime fecha, IAsistenciaRepository repo)
+        public FormAgregarEditarAsistencia(AddAsistencia addAsistencia, 
+                                           EditAsistencia editAsistencia,
+                                           DeleteAsistencia deleteAsistencia)
         {
             InitializeComponent();
-            _asistenciaRepository = repo;
-            investigadorId = idInvestigador;
-            fechaAsistencia = fecha;
-            this.Text = $"Agregar Asistencia - {fecha:dd/MM/yyyy}";
+            _addAsistencia = addAsistencia;
+            _editAsistencia = editAsistencia;
+            _deleteAsistencia = deleteAsistencia;
+        }
+
+        public void LoadDataAdd(int idInvestigador, DateTime fecha)
+        {
+            _investigadorId = idInvestigador;
+            _fechaAsistencia = fecha;
+            Text = $"Agregar Asistencia - {fecha:dd/MM/yyyy}";
             dtpHoraEntrada.Value = fecha.Date + new TimeSpan(9, 0, 0); // Default 9 AM
             dtpHoraSalida.Value = fecha.Date + new TimeSpan(17, 0, 0); // Default 5 PM
         }
 
-        // Constructor para EDITAR
-        public FormAgregarEditarAsistencia(Asistencia asistencia, IAsistenciaRepository repo)
+        public void LoadDataEdit(Asistencia asistencia)
         {
-            InitializeComponent();
-            _asistenciaRepository = repo;
-            asistenciaActual = asistencia;
-            esEdicion = true;
-            this.Text = $"Editar Asistencia - {asistencia.Fecha:dd/MM/yyyy}";
+            _asistenciaActual = asistencia;
+            _esEdicion = true;
+
+            Text = $"Editar Asistencia - {asistencia.Fecha:dd/MM/yyyy}";
 
             // Cargar datos en los controles
             dtpHoraEntrada.Value = asistencia.Fecha.ToDateTime(asistencia.HoraEntrada);
@@ -52,31 +62,49 @@ namespace WinFormsAsistenciaInvestigadores
 
             try
             {
-                if (!esEdicion)
+                if (!_esEdicion)
                 {
-                    asistenciaActual = new Asistencia
+                    _asistenciaActual = new Asistencia
                     {
-                        IDInvestigador = investigadorId,
-                        Fecha = DateOnly.FromDateTime(fechaAsistencia),
+                        IDInvestigador = _investigadorId,
+                        Fecha = DateOnly.FromDateTime(_fechaAsistencia),
                         HoraEntrada = horaEntrada,
                         HoraSalida = horaSalida
                     };
-                    await _asistenciaRepository.AddAsync(asistenciaActual);
+                    await _addAsistencia.ExecuteAsync(_asistenciaActual);
                 }
                 else
                 {
-                    asistenciaActual.HoraEntrada = horaEntrada;
-                    asistenciaActual.HoraSalida = horaSalida;
-                    await _asistenciaRepository.EditAsync(asistenciaActual);
+                    _asistenciaActual.HoraEntrada = horaEntrada;
+                    _asistenciaActual.HoraSalida = horaSalida;
+                    await _editAsistencia.ExecuteAsync(_asistenciaActual);
                 }
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                DialogResult = DialogResult.OK;
+                Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ocurrió un error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private async void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (!_esEdicion)
+            {
+                MessageBox.Show("No existe una asistencia para poder eliminar en esta fecha.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult ok = MessageBox.Show("¿Desea eliminar la asistencia?", "Aviso", MessageBoxButtons.YesNo);
+            
+            if (ok == DialogResult.Yes)
+            {
+                await _deleteAsistencia.ExecuteAsync(_asistenciaActual.IDAsistencia);
+            }
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

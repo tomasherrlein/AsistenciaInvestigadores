@@ -2,24 +2,30 @@
 using ApplicationBussines.DTOs;
 using ApplicationBussines.QueryObjects;
 using Entities;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace WinFormsAsistenciaInvestigadores
 {
     public partial class FormAsistenciasInvestigador : Form
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly InvestigadorConDepartamentosQuery _query;
         private readonly IAsistenciaRepository _asistenciaRepository;
         private InvestigadorDTO investigadorSeleccionado;
 
-        public FormAsistenciasInvestigador(InvestigadorConDepartamentosQuery query, IAsistenciaRepository asistenciaRepository)
+        public FormAsistenciasInvestigador(InvestigadorConDepartamentosQuery query, 
+                            IAsistenciaRepository asistenciaRepository,
+                            IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            _serviceProvider = serviceProvider;
             _query = query;
             _asistenciaRepository = asistenciaRepository;
         }
@@ -69,33 +75,66 @@ namespace WinFormsAsistenciaInvestigadores
             if (investigadorSeleccionado == null) return;
 
             var asistencias = await _asistenciaRepository.GetAsistenciasDeInvestigadorPorMesAsync(investigadorSeleccionado.Id, anio, mes);
+            var asistenciasPorFecha = asistencias.ToDictionary(a => a.Fecha, a => a);
 
             foreach (Button btn in tableLayoutPanel1.Controls)
             {
-                if (btn.Tag is DateTime)
+                DateTime fechaDelBoton; // Variable para almacenar la fecha del día que representa el botón
+
+                // Primero, intentar obtener la fecha si el Tag es un DateTime (estado inicial o reseteado)
+                if (btn.Tag is DateTime tagDate)
                 {
-                    DateTime fechaBtn = (DateTime)btn.Tag;
-                    var asistenciaDia = asistencias.FirstOrDefault(a => a.Fecha == DateOnly.FromDateTime(fechaBtn));
+                    fechaDelBoton = tagDate;
+                }
+          
+                else if (btn.Tag is Asistencia tagAsistencia)
+                {
+                    fechaDelBoton = tagAsistencia.Fecha.ToDateTime(TimeOnly.MinValue); // Obtener la fecha de la Asistencia
+                }
 
-                    // Reset style before applying new one
-                    btn.BackColor = SystemColors.Control;
-                    btn.Text = fechaBtn.Day.ToString();
+                else
+                {
+                    // Si el Tag no es ni DateTime ni Asistencia, no es un botón de día que nos interese.
+                    continue;
+                }
 
-                    if (asistenciaDia != null)
+                // Resetear el estado visual del botón
+                btn.BackColor = SystemColors.Control;
+                btn.Text = fechaDelBoton.Day.ToString(); // Siempre mostrar el número del día por defecto
+                btn.FlatStyle = FlatStyle.Standard;
+                btn.FlatAppearance.BorderColor = Color.Empty;
+                btn.FlatAppearance.BorderSize = 0;
+
+                // Buscar si hay una asistencia para esta fecha en los datos actualizados
+                if (asistenciasPorFecha.TryGetValue(DateOnly.FromDateTime(fechaDelBoton), out Asistencia asistenciaDia))
+                {
+                    // Si se encontró una asistencia para este día, actualizar el botón con sus datos
+                    btn.Tag = asistenciaDia; // Actualizar el Tag con la entidad Asistencia
+
+                    try
                     {
-                        btn.Tag = asistenciaDia;
-                        try
-                        {
-                            TimeSpan tiempoEmpleado = asistenciaDia.GetTiempoEmpleado();
-                            btn.Text = $"E: {asistenciaDia.HoraEntrada:HH:mm}\nS: {asistenciaDia.HoraSalida:HH:mm}\nTotal: {tiempoEmpleado:hh\\:mm}";
-                            btn.BackColor = Color.GreenYellow;
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            btn.Text = "Error en Horas";
-                            btn.BackColor = Color.OrangeRed;
-                        }
+                        TimeSpan tiempoEmpleado = asistenciaDia.GetTiempoEmpleado();
+                        btn.Text =$"{fechaDelBoton.Day.ToString()}\nE: {asistenciaDia.HoraEntrada:HH:mm}\nS: {asistenciaDia.HoraSalida:HH:mm}\nTotal: {tiempoEmpleado:hh\\:mm}";
+                        btn.BackColor = Color.LightGreen;
+                        btn.FlatStyle = FlatStyle.Flat;
+                        btn.FlatAppearance.BorderColor = Color.GreenYellow;
+                        btn.FlatAppearance.BorderSize = 2;
                     }
+                    catch (InvalidOperationException)
+                    {
+                        btn.Text = "Error en Horas";
+                        btn.BackColor = Color.OrangeRed;
+                        btn.FlatStyle = FlatStyle.Flat;
+                        btn.FlatAppearance.BorderColor = Color.DarkRed;
+                        btn.FlatAppearance.BorderSize = 2;
+                    }
+                }
+                else
+                {
+                    // Si NO se encontró una asistencia para este día (ej. fue eliminada o nunca existió),
+                    // el Tag vuelve a ser la fecha DateTime original.
+                    // Esto es importante para que el botón se identifique correctamente como un día vacío en futuras cargas.
+                    btn.Tag = fechaDelBoton;
                 }
             }
         }
@@ -104,17 +143,17 @@ namespace WinFormsAsistenciaInvestigadores
         private async void BtnCalendario_Click(object sender, EventArgs e)
         {
             Button btnDia = (Button)sender;
-            FormAgregarEditarAsistencia formAsistencia;
+            var formAsistencia = _serviceProvider.GetRequiredService<FormAgregarEditarAsistencia>();
 
             if (btnDia.Tag is Asistencia)
             {
                 Asistencia asistencia = (Asistencia)btnDia.Tag;
-                formAsistencia = new FormAgregarEditarAsistencia(asistencia, _asistenciaRepository);
+                formAsistencia.LoadDataEdit(asistencia);
             }
             else
             {
                 DateTime fecha = (DateTime)btnDia.Tag;
-                formAsistencia = new FormAgregarEditarAsistencia(investigadorSeleccionado.Id, fecha, _asistenciaRepository);
+                formAsistencia.LoadDataAdd(investigadorSeleccionado.Id, fecha);
             }
 
             var dialogResult = formAsistencia.ShowDialog();

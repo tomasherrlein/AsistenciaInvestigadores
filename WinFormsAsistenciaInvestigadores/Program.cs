@@ -10,6 +10,7 @@ using ApplicationBussines.Mappers;
 using ApplicationBussines.QueryObjects;
 using System.Windows.Forms;
 using ApplicationBussines.UseCasesInvestigador;
+using ApplicationBussines.UseCasesAsistencia;
 
 
 namespace WinFormsAsistenciaInvestigadores
@@ -42,7 +43,7 @@ namespace WinFormsAsistenciaInvestigadores
                 .Build();
                 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DBCasa")));
+                options.UseSqlServer(configuration.GetConnectionString("DB")));
 
             //Repositorys
             services.AddTransient<IInvestigadorRepository, InvestigadorRepository>();
@@ -60,11 +61,15 @@ namespace WinFormsAsistenciaInvestigadores
             services.AddTransient<EditInvestigador>();
             services.AddTransient<SoftDeleteInvestigador>();
             services.AddTransient<SoftRestoreInvestigador>();
+            services.AddTransient<AddAsistencia>();
+            services.AddTransient<EditAsistencia>();
+            services.AddTransient<DeleteAsistencia>();
 
             //Forms
             services.AddTransient<FormPrincipal>();
             services.AddTransient<FormInvestigadores>();
             services.AddTransient<FormAgregarEditarInvestigador>();
+            services.AddTransient<FormAgregarEditarAsistencia>();
             services.AddTransient<FormAsistenciasInvestigador>();
         }
     }
